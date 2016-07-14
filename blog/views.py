@@ -1,25 +1,25 @@
 # coding:utf-8
-from django.http.response import HttpResponse
 from django.shortcuts import render
-from blog.controller.Houtai.Index.IndexController import IndexController
 
 from blog.models import Users
 
 
-def admin(request,a,c):
-    obj = IndexController()
-    return obj.run()
+def admin(request,controller,action):
+    exec 'from blog.controller.Admin.'+controller+'Controller import '+controller+'Controller'
+    exec 'c = '+controller+'Controller()'
+    exec 'res = c.'+action+'()'
+    return res
 
 def blog(request):
     return render(request,'Blog/index.html')
 
 def login(request):
-    return render(request,'houtai/login.html')
+    return render(request, 'Admin/login.html')
 
 
 def head(request):
     user = Users.objects.get(userid = '1')
-    return render(request, 'houtai/head.html',{"user":user})
+    return render(request, 'Admin/Index/head.html',{"user":user})
 #
 # def left(request):
 #     return render(request, 'houtai/left.html')
